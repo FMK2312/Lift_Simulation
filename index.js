@@ -38,30 +38,34 @@ const createFloors = () => {
     buttonDiv.id = "buttons" + i.toString();
 
     const buttonUp = document.createElement("button");
-    if (windowWidth > 768) buttonUp.innerHTML = "Up";
-    else {
+    if (windowWidth > 768) {
+      buttonUp.innerHTML = "Up";
+      buttonUp.id = "Up" + "_" + i.toString();
+      buttonUp.addEventListener("click", upButton);
+    } else {
       const img = document.createElement("img");
       img.src = "./images/up-chevron.png";
       img.style.width = "100%";
       img.style.height = "100%";
+      img.id = "UpImg" + "_" + i.toString();
       img.addEventListener("click", upButton);
       buttonUp.appendChild(img);
     }
-    buttonUp.id = "Up" + "_" + i.toString();
-    buttonUp.addEventListener("click", upButton);
 
     const buttonDown = document.createElement("button");
-    if (windowWidth > 768) buttonDown.innerHTML = "Down";
-    else {
+    if (windowWidth > 768) {
+      buttonDown.innerHTML = "Down";
+      buttonDown.id = "Down" + "_" + i.toString();
+      buttonDown.addEventListener("click", downButton);
+    } else {
       const img = document.createElement("img");
       img.src = "./images/down-chevron.png";
       img.style.width = "100%";
       img.style.height = "100%";
+      img.id = "DownImg" + "_" + i.toString();
       img.addEventListener("click", downButton);
       buttonDown.appendChild(img);
     }
-    buttonDown.id = "Down" + "_" + i.toString();
-    buttonDown.addEventListener("click", downButton);
 
     const heading = document.createElement("h3");
     if (windowWidth > 768) heading.innerHTML = "Floor" + i.toString();
@@ -147,13 +151,23 @@ const downButton = (e) => {
 };
 
 const disableButtons = () => {
-  const str = "Up" + "_" + floors;
-  const upBt = document.getElementById(str);
-  upBt.style.visibility = "hidden";
+  if (windowWidth < 768) {
+    const id2 = "DownImg_" + 1;
+    const downImg = document.getElementById(id2).parentNode;
+    downImg.style.visibility = "hidden";
 
-  const str2 = "Down" + "_" + 1;
-  const downBt = document.getElementById(str2);
-  downBt.style.visibility = "hidden";
+    const id = "UpImg_" + floors;
+    const upImg = document.getElementById(id).parentNode;
+    upImg.style.visibility = "hidden";
+  } else {
+    const str = "Up" + "_" + floors;
+    const upBt = document.getElementById(str);
+    upBt.style.visibility = "hidden";
+
+    const str2 = "Down" + "_" + 1;
+    const downBt = document.getElementById(str2);
+    downBt.style.visibility = "hidden";
+  }
 };
 
 //generating UI functions
