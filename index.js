@@ -100,7 +100,7 @@ const upButton = (e) => {
     }
   }
 
-  const element = liftToMove();
+  const element = liftToMove(parseInt(num));
 
   moveLift(element, num);
 };
@@ -120,7 +120,7 @@ const downButton = (e) => {
     }
   }
 
-  const element = liftToMove();
+  const element = liftToMove(parseInt(num));
 
   moveLift(element, num);
 };
@@ -187,16 +187,32 @@ function getTranslateValues(element) {
   }
 }
 
-const liftToMove = () => {
-  const liftContainer = document.getElementById("lifts");
+const liftToMove = (num) => {
+  const liftContainer = document.getElementById("lifts").children;
+  const liftArray = [...liftContainer];
 
-  let element;
-  for (let i = 1; i <= lifts; i++) {
-    if (liftContainer.childNodes[i - 1].getAttribute("status") === "free") {
-      element = liftContainer.childNodes[i - 1];
-      break;
+  const freeArray = liftArray.filter((lift) => {
+    return lift.getAttribute("status") === "free";
+  });
+
+  console.log(freeArray);
+
+  let liftID;
+  let minDistance = 1000000;
+  for (let i = 0; i < freeArray.length; i++) {
+    let curr = parseInt(freeArray[i].attributes.currentFloor.value);
+
+    let distance = Math.abs(num - curr);
+    if (distance < minDistance) {
+      minDistance = distance;
+      liftID = freeArray[i].attributes.id.value;
     }
   }
+
+  console.log(liftID);
+  const element = document.getElementById(liftID);
+
+  console.log(element);
 
   return element;
 };
@@ -256,19 +272,4 @@ const openDoor = (element, distance, num) => {
   setTimeout(() => {
     element.setAttribute("currentFloor", num.toString());
   }, 6000);
-};
-
-const checkIfPresent = (num) => {
-  const liftContainer = document.getElementById("lifts");
-
-  for (let i = 1; i <= lifts; i++) {
-    if (
-      liftContainer.childNodes[i - 1].getAttribute("currentFloor") ===
-      num.toString()
-    ) {
-      return [true, liftContainer.childNodes[i - 1]];
-    }
-  }
-
-  return [false, null];
 };
