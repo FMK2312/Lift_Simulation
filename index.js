@@ -5,7 +5,6 @@ let curr_floor = 1;
 let last_clicked = -1;
 
 const windowWidth = window.innerWidth;
-console.log(windowWidth);
 
 const createRoot = () => {
   const rootDiv = document.createElement("div");
@@ -44,7 +43,11 @@ const createFloors = () => {
     buttonUp.addEventListener("click", upButton);
 
     const buttonDown = document.createElement("button");
-    buttonDown.innerHTML = "Down";
+    if (windowWidth > 768) buttonDown.innerHTML = "Down";
+    else {
+      buttonDown.outerHTML +=
+        '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"></svg>';
+    }
     buttonDown.id = "Down" + "_" + i.toString();
     buttonDown.addEventListener("click", downButton);
 
