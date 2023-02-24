@@ -89,141 +89,40 @@ const upButton = (e) => {
   const elId = e.target.id;
   const num = elId.split("_")[1];
 
-  const liftContainer = document.getElementById("lifts");
-
-  let element;
+  const el = document.getElementById("lifts");
   for (let i = 1; i <= lifts; i++) {
-    if (liftContainer.childNodes[i - 1].getAttribute("status") === "free") {
-      element = liftContainer.childNodes[i - 1];
-      break;
+    if (
+      el.childNodes[i - 1].getAttribute("currentFloor") == num &&
+      el.childNodes[i - 1].getAttribute("status") === "free"
+    ) {
+      openDoor(el.childNodes[i - 1], 0, num);
+      return;
     }
   }
 
-  //get the lift to move
-  console.log(element);
+  const element = liftToMove(parseInt(num));
 
-  //get the current floor of the lift selected
-  const curr_floor = element.getAttribute("currentFloor");
-
-  //get the previous translateY value of the lift
-  const { x, y, z } = getTranslateValues(element);
-
-  //calculate the distance by which we want the lift to move
-  const distance = Math.abs(num - curr_floor);
-
-  //get the status of the lift
-  const status = element.getAttribute("status");
-
-  //if the floor we need to go to is above the current floor our lift is at negate the floor height = 105px
-  if (status === "free") {
-    //set the status as busy
-    element.setAttribute("status", "busy");
-
-    if (distance > 0 && parseInt(num) > parseInt(curr_floor)) {
-      const travel = parseInt(y) + distance * 105 * -1;
-
-      element.style.transform = `translateY(${travel}px)`;
-      element.style.transition = `${distance * 2}s linear`;
-    }
-    //else if the floor we want to go is below, just add the floor height
-    else if (distance > 0 && parseInt(num) < parseInt(curr_floor)) {
-      const travel = parseInt(y) + distance * 105;
-
-      element.style.transform = `translateY(${travel}px)`;
-      element.style.transition = `${distance * 2}s linear`;
-    }
-
-    //door opening and closing sequence
-    const el = element.children[0];
-    setTimeout(() => {
-      el.classList.add("open");
-    }, distance * 2000 + 1000);
-
-    setTimeout(() => {
-      el.classList.remove("open");
-    }, distance * 2000 + 4000);
-
-    //set the status again as free
-    setTimeout(() => {
-      element.setAttribute("status", "free");
-    }, distance * 2000 + 6000);
-
-    //setting the current floor to the new floor index
-    setTimeout(() => {
-      element.setAttribute("currentFloor", num.toString());
-    }, 6000);
-  }
+  moveLift(element, num);
 };
 
 const downButton = (e) => {
   //get the floor number embedded into each button id
   const elId = e.target.id;
   const num = elId.split("_")[1];
-
-  const liftContainer = document.getElementById("lifts");
-
-  let element;
+  const el = document.getElementById("lifts");
   for (let i = 1; i <= lifts; i++) {
-    if (liftContainer.childNodes[i - 1].getAttribute("status") === "free") {
-      element = liftContainer.childNodes[i - 1];
-      break;
+    if (
+      el.childNodes[i - 1].getAttribute("currentFloor") == num &&
+      el.childNodes[i - 1].getAttribute("status") === "free"
+    ) {
+      openDoor(el.childNodes[i - 1], 0, num);
+      return;
     }
   }
 
-  //get the lift to move
-  console.log(element);
+  const element = liftToMove(parseInt(num));
 
-  //get the current floor of the lift selected
-  const curr_floor = element.getAttribute("currentFloor");
-
-  //get the previous translateY value of the lift
-  const { x, y, z } = getTranslateValues(element);
-
-  //calculate the distance by which we want the lift to move
-  const distance = Math.abs(num - curr_floor);
-
-  //get the status of the lift
-  const status = element.getAttribute("status");
-
-  //if the floor we need to go to is above the current floor our lift is at negate the floor height = 105px
-  if (status === "free") {
-    //set the status as busy
-    element.setAttribute("status", "busy");
-
-    if (distance > 0 && parseInt(num) > parseInt(curr_floor)) {
-      const travel = parseInt(y) + distance * 105 * -1;
-
-      element.style.transform = `translateY(${travel}px)`;
-      element.style.transition = `${distance * 2}s linear`;
-    }
-    //else if the floor we want to go is below, just add the floor height
-    else if (distance > 0 && parseInt(num) < parseInt(curr_floor)) {
-      const travel = parseInt(y) + distance * 105;
-
-      element.style.transform = `translateY(${travel}px)`;
-      element.style.transition = `${distance * 2}s linear`;
-    }
-
-    //door opening and closing sequence
-    const el = element.children[0];
-    setTimeout(() => {
-      el.classList.add("open");
-    }, distance * 2000 + 1000);
-
-    setTimeout(() => {
-      el.classList.remove("open");
-    }, distance * 2000 + 4000);
-
-    //set the status again as free
-    setTimeout(() => {
-      element.setAttribute("status", "free");
-    }, distance * 2000 + 6000);
-
-    //setting the current floor to the new floor index
-    setTimeout(() => {
-      element.setAttribute("currentFloor", num.toString());
-    }, 6000);
-  }
+  moveLift(element, num);
 };
 
 const disableButtons = () => {
@@ -235,6 +134,19 @@ const disableButtons = () => {
   const downBt = document.getElementById(str2);
   downBt.style.visibility = "hidden";
 };
+
+//generating UI functions
+createRoot();
+message();
+
+if (floors != 0 && lifts != 0) {
+  createFloors();
+  createLifts();
+}
+
+disableButtons();
+
+//Utility functions
 
 function getTranslateValues(element) {
   const style = window.getComputedStyle(element);
@@ -275,12 +187,89 @@ function getTranslateValues(element) {
   }
 }
 
-createRoot();
-message();
+const liftToMove = (num) => {
+  const liftContainer = document.getElementById("lifts").children;
+  const liftArray = [...liftContainer];
 
-if (floors != 0 && lifts != 0) {
-  createFloors();
-  createLifts();
-}
+  const freeArray = liftArray.filter((lift) => {
+    return lift.getAttribute("status") === "free";
+  });
 
-disableButtons();
+  console.log(freeArray);
+
+  let liftID;
+  let minDistance = 1000000;
+  for (let i = 0; i < freeArray.length; i++) {
+    let curr = parseInt(freeArray[i].attributes.currentFloor.value);
+
+    let distance = Math.abs(num - curr);
+    if (distance < minDistance) {
+      minDistance = distance;
+      liftID = freeArray[i].attributes.id.value;
+    }
+  }
+
+  console.log(liftID);
+  const element = document.getElementById(liftID);
+
+  console.log(element);
+
+  return element;
+};
+
+const moveLift = (element, num) => {
+  //get the current floor of the lift selected
+  const curr_floor = element.getAttribute("currentFloor");
+
+  //get the previous translateY value of the lift
+  const { x, y, z } = getTranslateValues(element);
+
+  //calculate the distance by which we want the lift to move
+  const distance = Math.abs(num - curr_floor);
+
+  //get the status of the lift
+  const status = element.getAttribute("status");
+
+  //if the floor we need to go to is above the current floor our lift is at negate the floor height = 105px
+  if (status === "free") {
+    //set the status as busy
+    element.setAttribute("status", "busy");
+
+    if (distance > 0 && parseInt(num) > parseInt(curr_floor)) {
+      const travel = parseInt(y) + distance * 105 * -1;
+
+      element.style.transform = `translateY(${travel}px)`;
+      element.style.transition = `${distance * 2}s linear`;
+    }
+    //else if the floor we want to go is below, just add the floor height
+    else if (distance > 0 && parseInt(num) < parseInt(curr_floor)) {
+      const travel = parseInt(y) + distance * 105;
+
+      element.style.transform = `translateY(${travel}px)`;
+      element.style.transition = `${distance * 2}s linear`;
+    }
+
+    openDoor(element, distance, num);
+  }
+};
+
+const openDoor = (element, distance, num) => {
+  const el = element.children[0];
+  setTimeout(() => {
+    el.classList.add("open");
+  }, distance * 2000 + 1000);
+
+  setTimeout(() => {
+    el.classList.remove("open");
+  }, distance * 2000 + 4000);
+
+  //set the status again as free
+  setTimeout(() => {
+    element.setAttribute("status", "free");
+  }, distance * 2000 + 6000);
+
+  //setting the current floor to the new floor index
+  setTimeout(() => {
+    element.setAttribute("currentFloor", num.toString());
+  }, 6000);
+};
