@@ -44,6 +44,7 @@ const createFloors = () => {
       img.src = "./images/up-chevron.png";
       img.style.width = "100%";
       img.style.height = "100%";
+      img.addEventListener("click", upButton);
       buttonUp.appendChild(img);
     }
     buttonUp.id = "Up" + "_" + i.toString();
@@ -56,6 +57,7 @@ const createFloors = () => {
       img.src = "./images/down-chevron.png";
       img.style.width = "100%";
       img.style.height = "100%";
+      img.addEventListener("click", downButton);
       buttonDown.appendChild(img);
     }
     buttonDown.id = "Down" + "_" + i.toString();
