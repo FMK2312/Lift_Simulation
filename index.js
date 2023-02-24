@@ -38,7 +38,7 @@ const createFloors = () => {
     buttonDiv.id = "buttons" + i.toString();
 
     const buttonUp = document.createElement("button");
-    if (windowWidth > 768) buttonUp.innerHTML = "Down";
+    if (windowWidth > 768) buttonUp.innerHTML = "Up";
     else {
       const img = document.createElement("img");
       img.src = "./images/up-chevron.png";
