@@ -224,6 +224,18 @@ const moveLift = (element, num) => {
   //get the previous translateY value of the lift
   const { x, y, z } = getTranslateValues(element);
 
+  //get the height of the lift element
+  const styles = window.getComputedStyle(element);
+  const heightOfLift = parseInt(styles["height"]);
+
+  //get the padding value of floor
+  const stylePadding = window.getComputedStyle(
+    document.getElementById("floor-1")
+  );
+  const paddingValue = parseInt(stylePadding["padding"]);
+
+  const offSet = heightOfLift + 2 * paddingValue;
+
   //calculate the distance by which we want the lift to move
   const distance = Math.abs(num - curr_floor);
 
@@ -236,14 +248,14 @@ const moveLift = (element, num) => {
     element.setAttribute("status", "busy");
 
     if (distance > 0 && parseInt(num) > parseInt(curr_floor)) {
-      const travel = parseInt(y) + distance * 105 * -1;
+      const travel = parseInt(y) + distance * offSet * -1;
 
       element.style.transform = `translateY(${travel}px)`;
       element.style.transition = `${distance * 2}s linear`;
     }
     //else if the floor we want to go is below, just add the floor height
     else if (distance > 0 && parseInt(num) < parseInt(curr_floor)) {
-      const travel = parseInt(y) + distance * 105;
+      const travel = parseInt(y) + distance * offSet;
 
       element.style.transform = `translateY(${travel}px)`;
       element.style.transition = `${distance * 2}s linear`;
