@@ -4,6 +4,9 @@ let lifts = prompt("Enter number of Lifts");
 let curr_floor = 1;
 let last_clicked = -1;
 
+const windowWidth = window.innerWidth;
+console.log(windowWidth);
+
 const createRoot = () => {
   const rootDiv = document.createElement("div");
   rootDiv.id = "root";
@@ -46,7 +49,10 @@ const createFloors = () => {
     buttonDown.addEventListener("click", downButton);
 
     const heading = document.createElement("h3");
-    heading.innerHTML = "Floor" + i.toString();
+    if (windowWidth > 768) heading.innerHTML = "Floor" + i.toString();
+    else {
+      heading.innerHTML = i.toString();
+    }
 
     buttonDiv.appendChild(buttonUp);
 
@@ -233,6 +239,8 @@ const moveLift = (element, num) => {
     document.getElementById("floor-1")
   );
   const paddingValue = parseInt(stylePadding["padding"]);
+
+  console.log(heightOfLift);
 
   const offSet = heightOfLift + 2 * paddingValue;
 
