@@ -38,15 +38,25 @@ const createFloors = () => {
     buttonDiv.id = "buttons" + i.toString();
 
     const buttonUp = document.createElement("button");
-    buttonUp.innerHTML = "Up";
+    if (windowWidth > 768) buttonUp.innerHTML = "Down";
+    else {
+      const img = document.createElement("img");
+      img.src = "./images/up-chevron.png";
+      img.style.width = "100%";
+      img.style.height = "100%";
+      buttonUp.appendChild(img);
+    }
     buttonUp.id = "Up" + "_" + i.toString();
     buttonUp.addEventListener("click", upButton);
 
     const buttonDown = document.createElement("button");
     if (windowWidth > 768) buttonDown.innerHTML = "Down";
     else {
-      buttonDown.outerHTML +=
-        '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"></svg>';
+      const img = document.createElement("img");
+      img.src = "./images/down-chevron.png";
+      img.style.width = "100%";
+      img.style.height = "100%";
+      buttonDown.appendChild(img);
     }
     buttonDown.id = "Down" + "_" + i.toString();
     buttonDown.addEventListener("click", downButton);
