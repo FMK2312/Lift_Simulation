@@ -120,6 +120,8 @@ const upButton = (e) => {
       el.childNodes[i - 1].getAttribute("currentFloor") == num &&
       el.childNodes[i - 1].getAttribute("status") === "free"
     ) {
+      el.childNodes[i - 1].setAttribute("status", "busy");
+      console.log(el.childNodes[i - 1]);
       openDoor(el.childNodes[i - 1], 0, num);
       return;
     }
@@ -140,6 +142,8 @@ const downButton = (e) => {
       el.childNodes[i - 1].getAttribute("currentFloor") == num &&
       el.childNodes[i - 1].getAttribute("status") === "free"
     ) {
+      el.childNodes[i - 1].setAttribute("status", "busy");
+      console.log(el.childNodes[i - 1]);
       openDoor(el.childNodes[i - 1], 0, num);
       return;
     }
